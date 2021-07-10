@@ -19,6 +19,7 @@ namespace GradeBook
             Console.WriteLine($"The avergare grade is: {stats.Average:N2}");  // Specifying the number of decimals.
             Console.WriteLine($"The max grade is: {stats.High}");  // Specifying the number of decimals.
             Console.WriteLine($"The min grade is: {stats.Low}");  // Specifying the number of decimals.
+            Console.WriteLine($"The letter is : {stats.Letter}");  // Specifying the number of decimals.
         }
     }
 }
