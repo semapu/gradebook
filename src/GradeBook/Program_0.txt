@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;  // To be able to use the type List
+
+namespace GradeBook
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // double x = 3.4;
+            // double y = 4.3;
+            // double[] numbers = new double[3];  //It has to be initialized (always)
+            // numbers[0] = 3.4;
+            // numbers[1] = 4.3;
+            // numbers[1] = 7.4;
+            // double[] numbers = new double[] {3.4, 4.3, 7.4};  // The initialization can be automatically done
+            
+            // To use the type List -> We must import the correct statement 
+            // List<double> grades = new List<double>();  // We do not know the number of grades provided
+            // List<double> grades = new List<double> {3.4, 4.3, 7.4}; // Create an initialize the List
+            var grades = new List<double> {3.4, 4.3, 7.4}; // Another option using VAR
+
+            // double addition = x + y;
+            // double addition = numbers[0] + numbers[1];
+            double addition = 0.0;
+            
+            // foreach(double number in numbers)  // To loop through a colleciton
+            // {
+            //     addition += number;
+            // }
+
+
+            foreach(double grade in grades)  // To loop through a colleciton
+            {
+                addition += grade;
+            }
+
+            int numGrades = grades.Count;
+
+            // Console.WriteLine(addition/numGrades); 
+            // Console.WriteLine($"The avergare grade is: {addition/numGrades}");  // Adding format
+            Console.WriteLine($"The avergare grade is: {addition/numGrades:N2}");  // Specifying the number of decimals
+
+            // Console.WriteLine("Hello World!");
+            // Console.WriteLine("Hello" + args[0] + "!");
+            if(args.Length > 0)  // Ensure an argument has been passed
+            {
+                Console.WriteLine($"Hello {args[0]} !");  // String interpolation
+            }
+            else
+            {
+                Console.WriteLine("Hello!");
+            }
+        }
+    }
+}
