@@ -90,7 +90,7 @@ namespace GradeBook
 
             result.Average /= grades.Count;
 
-            done:
+            // done:
             return result;
         }
 
