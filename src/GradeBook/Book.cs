@@ -42,7 +42,10 @@ namespace GradeBook
             }
             else
             {
-                Console.WriteLine("Invalid value");
+                // Console.WriteLine("Invalid value");
+
+                // nameof() force of to change the name "grade", if changed.
+                throw new ArgumentException($"Invalid {nameof(grade)}"); 
             }
         }
 
