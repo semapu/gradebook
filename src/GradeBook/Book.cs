@@ -138,7 +138,30 @@ namespace GradeBook
             return result;
         }
 
-        public string Name;
+        // public string Name;
+
+        // To encapsulate the property.
+        //  To have access the name, and be able to set it.
+        public string Name
+        {
+            // What read the property.
+            get{
+                return name;
+            }
+            // what sets the property.
+            set{
+                if(!String.IsNullOrEmpty(value))
+                {
+                    name = value;  // value is an implicity variable of the setter. It is the value trying to be written in the property.
+                }
+            }
+        }
+
+        // To protect the name of the gradeebook.
+        private string name;
+        
+
+
         private List<double> grades; 
         
     }
