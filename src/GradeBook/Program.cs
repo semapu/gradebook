@@ -8,7 +8,9 @@ namespace GradeBook
         static void Main(string[] args)
         {
             // Create the new object.
-            var book = new InMemoryBook("Sergi's grade book");
+            // var book = new InMemoryBook("Sergi's grade book");
+            IBook book = new DiskBook("Sergi's grade book");
+
 
             // To tell the book that we want to handdle the event.
             book.GradeAdded += OnGradeAdded;
