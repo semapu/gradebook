@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace GradeBook
 {
@@ -39,17 +40,55 @@ namespace GradeBook
         {
         }
 
-        public virtual event GradeAddedDelegate GradeAdded;
-
+        public abstract event GradeAddedDelegate GradeAdded;
         // Inside an abstract class we can have abstract methods.
         public abstract void AddGrade(double grade);
-
-        public virtual Statisitcs GetStatistics()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Statisitcs GetStatistics();
     }
 
+    public class DiskBook : Book
+    {
+        public DiskBook(string name) : base(name)
+        {
+            
+        }
+
+        public override event GradeAddedDelegate GradeAdded;
+
+        public override void AddGrade(double grade)
+        {
+            // Using() is equvalent to a try final statement.
+            // Moreover, it ensures that after the using(){...} the Dispose() is going to be called.
+            //  Dispose() ensures that no necessary things in memory are going to be cleaned.
+            using(var writter = File.AppendText($"{Name}.txt"))
+            {
+                writter.WriteLine(grade);
+                if(GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs());
+                }
+            }
+        }
+
+        // This mehot needs to read all the grades we have added to the file.
+        public override Statisitcs GetStatistics()
+        {
+            var result = new Statisitcs();
+
+            using(var reader = File.OpenText($"{Name}.txt"))
+            {
+                var line = reader.ReadLine();
+                while(line != null)
+                {
+                    var number = double.Parse(line);
+                    result.Add(number);
+                    line = reader.ReadLine();
+                }
+            }
+
+            return result;
+        }
+    }
     public class InMemoryBook : Book
     {       
 
@@ -111,17 +150,20 @@ namespace GradeBook
         public override Statisitcs GetStatistics()
         {
             var result = new Statisitcs();
-            result.Average = 0.0;
-            result.High = double.MinValue;
-            result.Low = double.MaxValue;
+
+            // Final verison. After refactoring Statistics.
+            for(var index = 0; index < grades.Count; index += 1)
+            {
+                result.Add(grades[index]);
+            }
 
             /* Using FORECH */
-            foreach(double grade in grades)  // To loop through a colleciton.
-            {   
-                result.High = Math.Max(grade, result.High);
-                result.Low = Math.Min(grade, result.Low);
-                result.Average += grade;
-            }
+            // foreach(double grade in grades)  // To loop through a colleciton.
+            // {   
+            //     result.High = Math.Max(grade, result.High);
+            //     result.Low = Math.Min(grade, result.Low);
+            //     result.Average += grade;
+            // }
 
             /* Using DO - WHILE. The first iteration is always done (there is no conditio to check at the beginning*/
             // var index = 0;
@@ -171,27 +213,6 @@ namespace GradeBook
             //     index += 1;
 
             // } 
-
-            result.Average /= grades.Count;
-
-            switch(result.Average)
-            {
-                case var d when d >= 90.0:
-                    result.Letter = 'A';
-                    break;
-                case var d when d >= 80.0:
-                    result.Letter = 'B';
-                    break;
-                case var d when d >= 70.0:
-                    result.Letter = 'C';
-                    break;
-                case var d when d >= 70.0:
-                    result.Letter = 'D';
-                    break;
-                default:
-                    result.Letter = 'F';
-                    break;
-            }
 
             // done:  // Label for the 'goto' statement
             return result;
