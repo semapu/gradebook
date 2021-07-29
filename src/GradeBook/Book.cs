@@ -5,6 +5,10 @@ namespace GradeBook
 {
     public class Book  // We want to expose this classe to be accesable from the UnitTest
     {
+        // Defining a delegate for the event. Typically they have two parameters.
+        public delegate void GradeAddedDelegate(object sender, EventArgs args);
+        
+
         // Explicit CONSTRUCTOR. Same name than int he class
         public Book(string name)  // "name" is constructor parameter. Requiered when creating a new object
         {
@@ -39,6 +43,10 @@ namespace GradeBook
             if(grade <= 100 && grade >= 0)
             {
                 grades.Add(grade);
+                if(GradeAdded != null)
+                {
+                    GradeAdded(this, new EventArgs());
+                }
             }
             else
             {
@@ -48,6 +56,9 @@ namespace GradeBook
                 throw new ArgumentException($"Invalid {nameof(grade)}"); 
             }
         }
+
+        // Definfing the event. A field in the Book class.
+        public event GradeAddedDelegate GradeAdded;
 
         public Statisitcs GetStatistics()
         {
