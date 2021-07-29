@@ -8,7 +8,10 @@ namespace GradeBook
         {
             // Create the new object.
             var book = new Book("Sergi's grade book");
-            
+
+            // To tell the book that we want to handdle the event.
+            book.GradeAdded += OnGradeAdded;
+
             // book.AddGrade(89.1);
             // book.AddGrade(98.1);
             // book.AddGrade(74.61);
@@ -55,6 +58,12 @@ namespace GradeBook
             Console.WriteLine($"The max grade is: {stats.High}");  // Specifying the number of decimals.
             Console.WriteLine($"The min grade is: {stats.Low}");  // Specifying the number of decimals.
             Console.WriteLine($"The letter is : {stats.Letter}");  // Specifying the number of decimals.
+        }
+
+        // Event handdler.
+        static void OnGradeAdded(object sender, EventArgs args)
+        {
+            Console.WriteLine("A graded has been added");
         }
     }
 }
