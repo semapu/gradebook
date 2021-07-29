@@ -3,16 +3,62 @@ using System.Collections.Generic;
 
 namespace GradeBook
 {
-    public class Book  // We want to expose this classe to be accesable from the UnitTest
-    {
-        // Defining a delegate for the event. Typically they have two parameters.
+    // Defining a delegate for the event. Typically they have two parameters.
         public delegate void GradeAddedDelegate(object sender, EventArgs args);
-        
 
-        // Explicit CONSTRUCTOR. Same name than int he class
-        public Book(string name)  // "name" is constructor parameter. Requiered when creating a new object
+    // Example on inheritance.
+    public class NamedObject
+    {   
+        // Constructor for the clas.
+        public NamedObject(string name)
         {
-            Name = name; // Implicity name 
+            Name = name;
+        }
+
+        public string Name
+        {
+            get;
+            set;            
+        }
+    }
+
+    // Interface definition.
+    public interface IBook
+    {
+        // public at the behining cannot be used.
+        void AddGrade(double grade);
+        Statisitcs GetStatistics();
+        string Name { get; }
+        event GradeAddedDelegate GradeAdded;
+    }
+
+    // Used to implement polymorphisim.
+    public abstract class Book : NamedObject, IBook
+    {
+        public Book(string name) : base(name)
+        {
+        }
+
+        public virtual event GradeAddedDelegate GradeAdded;
+
+        // Inside an abstract class we can have abstract methods.
+        public abstract void AddGrade(double grade);
+
+        public virtual Statisitcs GetStatistics()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class InMemoryBook : Book
+    {       
+
+        // Explicit CONSTRUCTOR. Same name than int he class.
+        // "name" is constructor parameter. Requiered when creating a new object.
+        // base() is used to refer to the constractor of the base class. In this case NamedObject.
+        public InMemoryBook(string name) : base(name)
+        {
+            Name = name; // Implicity name.
             grades = new List<double>();  // Initiallization
         }
 
@@ -38,7 +84,9 @@ namespace GradeBook
             }
         }
 
-        public void AddGrade(double grade)
+        // We can only override abstract methods. 
+        // Requiered for the implementaiton using polymorphism
+        public override void AddGrade(double grade)
         {
             if(grade <= 100 && grade >= 0)
             {
@@ -58,9 +106,9 @@ namespace GradeBook
         }
 
         // Definfing the event. A field in the Book class.
-        public event GradeAddedDelegate GradeAdded;
+        public override event GradeAddedDelegate GradeAdded;
 
-        public Statisitcs GetStatistics()
+        public override Statisitcs GetStatistics()
         {
             var result = new Statisitcs();
             result.Average = 0.0;
@@ -171,8 +219,6 @@ namespace GradeBook
         // To protect the name of the gradeebook.
         private string name;
         
-
-
         private List<double> grades; 
         
     }
